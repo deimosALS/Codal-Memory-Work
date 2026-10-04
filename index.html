@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LexMemoria: Rules 1 to 22 Practice Drill</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f4ff',
+              100: '#e0e9fe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            },
+            court: {
+              gold: '#f59e0b',
+              navy: '#0f172a',
+              card: '#1e293b',
+              border: '#334155',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #0b0f19;
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    .tile-transition {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+
+  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Logo & Title -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-brand-500/20">
+          <i class="fa-solid fa-scale-balanced text-white text-lg"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg text-white tracking-tight leading-tight flex items-center gap-2">
+            LexMemoria <span class="text-xs font-semibold px-2 py-0.5 rounded bg-brand-500/20 text-brand-400 border border-brand-500/30">Rules 1 - 22</span>
+          </h1>
+          <p class="text-xs text-slate-400">Civil Procedure Rules Drill & Keyword Memory App</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="hidden md:flex items-center space-x-1 bg-slate-800/60 p-1 rounded-xl border border-slate-700/50">
+        <button id="nav-practice" onclick="switchTab('practice')" class="px-4 py-1.5 rounded-lg text-sm font-medium text-white bg-brand-600 shadow-sm transition-all flex items-center gap-2">
+          <i class="fa-solid fa-gamepad text-xs"></i> Practice Drill
+        </button>
+        <button id="nav-rules" onclick="switchTab('rules')" class="px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition-all flex items-center gap-2">
+          <i class="fa-solid fa-book-bookmark text-xs"></i> Rules 1-22 Deck
+        </button>
+        <button id="nav-import" onclick="switchTab('import')" class="px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition-all flex items-center gap-2">
+          <i class="fa-solid fa-file-csv text-xs"></i> Import Data
+        </button>
+      </nav>
+
+      <!-- Quick Action Controls & Sound Toggle -->
+      <div class="flex items-center space-x-2">
+        <button id="sound-btn" onclick="toggleSound()" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition" title="Toggle Sound FX">
+          <i id="sound-icon" class="fa-solid fa-volume-high text-base text-brand-400"></i>
+        </button>
+        
+        <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-400 hover:text-white">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-800 bg-slate-900 px-4 py-3 space-y-2">
+      <button onclick="switchTab('practice'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-white bg-brand-600/30 flex items-center gap-2">
+        <i class="fa-solid fa-gamepad"></i> Practice Drill
+      </button>
+      <button onclick="switchTab('rules'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 flex items-center gap-2">
+        <i class="fa-solid fa-book-bookmark"></i> Rules 1-22 Deck
+      </button>
+      <button onclick="switchTab('import'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 flex items-center gap-2">
+        <i class="fa-solid fa-file-csv"></i> Import Data
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+
+    <!-- TAB 1: PRACTICE DRILL VIEW -->
+    <div id="tab-practice-view" class="space-y-6">
+      
+      <!-- Stats Summary Strip -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex items-center space-x-3">
+          <div class="p-2.5 rounded-lg bg-court-gold/10 text-court-gold border border-court-gold/20">
+            <i class="fa-solid fa-star text-lg"></i>
+          </div>
+          <div>
+            <div class="text-xs text-slate-400">Total Score</div>
+            <div id="stat-score" class="text-lg font-bold text-white font-mono">0 pts</div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex items-center space-x-3">
+          <div class="p-2.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <i class="fa-solid fa-bullseye text-lg"></i>
+          </div>
+          <div>
+            <div class="text-xs text-slate-400">Accuracy</div>
+            <div id="stat-accuracy" class="text-lg font-bold text-white font-mono">100%</div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex items-center space-x-3">
+          <div class="p-2.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <i class="fa-solid fa-fire text-lg"></i>
+          </div>
+          <div>
+            <div class="text-xs text-slate-400">Current Streak</div>
+            <div id="stat-streak" class="text-lg font-bold text-white font-mono">0</div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex items-center space-x-3">
+          <div class="p-2.5 rounded-lg bg-brand-500/10 text-brand-400 border border-brand-500/20">
+            <i class="fa-solid fa-trophy text-lg"></i>
+          </div>
+          <div>
+            <div class="text-xs text-slate-400">Rounds Done</div>
+            <div id="stat-rounds" class="text-lg font-bold text-white font-mono">0</div>
+          </div>
+        </div>
+
+        <div class="col-span-2 md:col-span-1 bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex items-center space-x-3">
+          <div class="p-2.5 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20">
+            <i class="fa-solid fa-layer-group text-lg"></i>
+          </div>
+          <div>
+            <div class="text-xs text-slate-400">Active Pool</div>
+            <div id="stat-pool" class="text-lg font-bold text-white font-mono">Rules 1-22</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mode Switcher & Filter Toolbar -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/80 p-3.5 rounded-2xl border border-slate-800">
+        
+        <!-- Practice Mode Tabs -->
+        <div class="inline-flex p-1 rounded-xl bg-slate-950 border border-slate-800 space-x-1">
+          <button id="mode-btn-tagging" onclick="switchPracticeMode('TAGGING')" class="px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition flex items-center gap-2 bg-brand-600 text-white shadow">
+            <i class="fa-solid fa-tags text-xs"></i> Mode A: Rule Tagging Drill
+          </button>
+          <button id="mode-btn-fill" onclick="switchPracticeMode('FILL_IN_BLANK')" class="px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition flex items-center gap-2 text-slate-400 hover:text-white">
+            <i class="fa-solid fa-pen-to-square text-xs"></i> Mode B: Fill-in-the-Blank
+          </button>
+        </div>
+
+        <!-- Rule Range Filter -->
+        <div class="flex items-center space-x-3">
+          <span class="text-xs font-medium text-slate-400 uppercase tracking-wider hidden sm:inline"><i class="fa-solid fa-filter text-brand-400"></i> Scope:</span>
+          <select id="rule-range-filter" onchange="onRuleRangeFilterChange()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs sm:text-sm rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 outline-none w-full sm:w-auto">
+            <option value="ALL">All Rules (Rules 1 to 22)</option>
+            <option value="RULES_1_5">Rules 1 – 5 (General, Actions, Parties, Venue)</option>
+            <option value="RULES_6_12">Rules 6 – 12 (Pleadings, Default, Amendments)</option>
+            <option value="RULES_13_17">Rules 13 – 17 (Filing, Summons, Motions, Dismissal)</option>
+            <option value="RULES_18_22">Rules 18 – 22 (Pre-Trial, Subpoena, Computation)</option>
+          </select>
+
+          <button onclick="resetStats()" class="text-xs text-slate-400 hover:text-white underline transition whitespace-nowrap">
+            Reset
+          </button>
+        </div>
+
+      </div>
+
+      <!-- MODE A CONTAINER: RULE TAGGING DRILL -->
+      <div id="mode-tagging-container" class="space-y-6">
+        
+        <!-- Target Rule Prompt Banner -->
+        <div class="relative overflow-hidden bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-2 border-brand-500/40 rounded-2xl p-6 shadow-2xl">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="space-y-2">
+              <div class="flex items-center gap-2">
+                <span id="target-category-badge" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-500/20 text-brand-300 border border-brand-500/30">
+                  Rules of Court
+                </span>
+                <span class="text-xs text-slate-400">Mode A Target Prompt</span>
+              </div>
+              
+              <h2 id="target-rule-title" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                RULE 14: Summons
+              </h2>
+              <p class="text-slate-300 text-sm sm:text-base">
+                Select <strong class="text-brand-400 font-semibold underline decoration-brand-500/50">ALL provisions below</strong> that belong under this specific Rule.
+              </p>
+            </div>
+
+            <!-- Session Indicator -->
+            <div class="flex flex-col items-end justify-center min-w-[140px]">
+              <span class="text-xs text-slate-400 mb-1">Target Rule</span>
+              <span id="tagging-rule-badge" class="text-xl font-bold font-mono text-brand-400 bg-brand-950/60 px-3 py-1 rounded-xl border border-brand-500/30">Rule 14</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Provision Tiles Grid -->
+        <div id="tiles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Dynamically populated tiles -->
+        </div>
+
+        <!-- Action Control Bar -->
+        <div class="sticky bottom-4 z-30 bg-slate-900/90 backdrop-blur-md border border-slate-800 rounded-2xl p-4 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div id="tagging-feedback-text" class="text-sm text-slate-300 flex items-center gap-2">
+            <i class="fa-solid fa-circle-info text-brand-400"></i>
+            <span>Click tiles to toggle selection, then click <strong>Check Answer</strong>.</span>
+          </div>
+
+          <div class="flex items-center space-x-3 w-full sm:w-auto">
+            <button id="btn-tagging-submit" onclick="evaluateTaggingAnswer()" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold shadow-lg shadow-brand-600/30 transition active:scale-95 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-check-double"></i> Check Answer
+            </button>
+
+            <button id="btn-tagging-next" onclick="generateNextRound()" class="hidden w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold shadow-lg shadow-emerald-600/30 transition active:scale-95 flex items-center justify-center gap-2">
+              Next Question <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- MODE B CONTAINER: FILL-IN-THE-BLANK KEYWORD RECALL -->
+      <div id="mode-fill-container" class="hidden space-y-6">
+        
+        <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-2 border-indigo-500/40 rounded-2xl p-6 shadow-2xl space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span id="fill-rule-badge" class="px-2.5 py-1 rounded-lg font-mono text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                Rule 7: Parts of Pleading
+              </span>
+              <span id="fill-section-badge" class="px-2 py-0.5 rounded text-xs font-mono bg-slate-800 text-slate-300 border border-slate-700">
+                Sec. 5
+              </span>
+            </div>
+
+            <span class="text-xs text-amber-400 font-semibold flex items-center gap-1">
+              <i class="fa-solid fa-key"></i> Key Legal Term Recall
+            </span>
+          </div>
+
+          <!-- Prompt Question Text -->
+          <div>
+            <h3 id="fill-prompt-title" class="text-lg font-bold text-slate-200">
+              Provision Keyword Recall
+            </h3>
+            <p id="fill-prompt-text" class="text-slate-100 text-base sm:text-xl font-medium leading-relaxed mt-2 p-4 bg-slate-950/70 rounded-xl border border-slate-800">
+              <!-- Prompt text with BLANK will be injected here -->
+            </p>
+          </div>
+
+          <!-- Hint Section Box -->
+          <div id="fill-hint-box" class="hidden p-4 rounded-xl bg-amber-950/30 border border-amber-500/30 text-amber-200 text-sm space-y-1">
+            <div class="font-bold text-amber-400 flex items-center gap-2 text-xs uppercase tracking-wider">
+              <i class="fa-solid fa-lightbulb"></i> Clue Hint (Penalty Applied: -50% Round Points)
+            </div>
+            <p id="fill-hint-content" class="text-xs sm:text-sm text-slate-300"></p>
+          </div>
+
+          <!-- User Input Box & Controls -->
+          <div class="space-y-3 pt-2">
+            <label for="fill-user-input" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Type the exact missing legal term:</label>
+            
+            <div class="flex flex-col sm:flex-row gap-3">
+              <input id="fill-user-input" type="text" placeholder="Type missing word/phrase..." autocomplete="off" onkeydown="if(event.key === 'Enter') evaluateFillAnswer()" class="flex-1 bg-slate-950 border-2 border-slate-700 focus:border-indigo-500 rounded-xl px-4 py-3 text-base text-white outline-none font-mono tracking-wide placeholder:text-slate-600 transition">
+              
+              <button id="btn-fill-hint" onclick="requestFillHint()" class="px-4 py-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs sm:text-sm font-medium transition flex items-center justify-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-lightbulb"></i> Need Hint? (-50% Penalty)
+              </button>
+            </div>
+          </div>
+
+          <!-- Answer Result Banner (Hidden initially) -->
+          <div id="fill-result-banner" class="hidden p-4 rounded-xl border text-sm font-medium"></div>
+
+        </div>
+
+        <!-- Action Control Bar for Mode B -->
+        <div class="sticky bottom-4 z-30 bg-slate-900/90 backdrop-blur-md border border-slate-800 rounded-2xl p-4 shadow-2xl flex items-center justify-between gap-4">
+          <div class="text-xs sm:text-sm text-slate-400">
+            <i class="fa-solid fa-keyboard text-indigo-400"></i> Press <strong>Enter</strong> to submit answer instantly.
+          </div>
+
+          <div class="flex items-center space-x-3">
+            <button id="btn-fill-submit" onclick="evaluateFillAnswer()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-brand-600 hover:from-indigo-500 hover:to-brand-500 text-white font-semibold shadow-lg shadow-indigo-600/30 transition active:scale-95 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Submit Answer
+            </button>
+
+            <button id="btn-fill-next" onclick="generateNextRound()" class="hidden px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold shadow-lg shadow-emerald-600/30 transition active:scale-95 flex items-center justify-center gap-2">
+              Next Word <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TAB 2: RULES 1 TO 22 DECK LIBRARY -->
+    <div id="tab-rules-view" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900 p-6 rounded-2xl border border-slate-800">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-book-open-reader text-brand-400"></i> Rules 1 to 22 Complete Deck
+          </h2>
+          <p class="text-sm text-slate-400">Browse all provisions, sections, and unique keywords loaded in the database.</p>
+        </div>
+
+        <div class="relative min-w-[240px]">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-500 text-sm"></i>
+          <input id="rules-search-input" type="text" onkeyup="filterRulesList()" placeholder="Search Rule # or keyword..." class="w-full bg-slate-800 border border-slate-700 rounded-xl pl-9 pr-4 py-2 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+      </div>
+
+      <div id="rules-accordion-container" class="space-y-4">
+        <!-- Accordion items inserted via Javascript -->
+      </div>
+    </div>
+
+    <!-- TAB 3: CUSTOM DATA IMPORTER -->
+    <div id="tab-import-view" class="hidden space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-file-import text-brand-400"></i> Import Custom Rules Data
+          </h2>
+          <p class="text-sm text-slate-400 mt-1">
+            Copy cells directly from Excel, Google Sheets, or a CSV file to add or replace rules data.
+          </p>
+        </div>
+
+        <!-- Format Helper Box -->
+        <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 text-xs text-slate-300 space-y-2">
+          <div class="font-semibold text-brand-300 flex items-center gap-1.5">
+            <i class="fa-solid fa-lightbulb text-amber-400"></i> Format Structure (Tab-Separated or CSV):
+          </div>
+          <p class="text-slate-400">Rule Name | Section # | Provision Title & Text | Unique Keyword | Hint Clue</p>
+          <div class="text-slate-500 font-mono text-[11px]">Example: Rule 14 [TAB] Sec. 6 [TAB] Substituted service may be effected by leaving copies at residence [TAB] substituted service [TAB] Service left at defendant's residence</div>
+        </div>
+
+        <!-- Textarea input -->
+        <div class="space-y-2">
+          <label for="import-textarea" class="block text-sm font-medium text-slate-300">Paste Table / CSV / TSV Raw Data:</label>
+          <textarea id="import-textarea" rows="8" placeholder="Rule 14	Sec. 6	Substituted service may be made...	substituted service	Left at defendant's residence
+Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	Motion bringing all objections at once" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-200 focus:ring-2 focus:ring-brand-500 outline-none leading-relaxed"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end space-x-3">
+          <button onclick="clearCustomData()" class="px-4 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 text-sm font-medium transition">
+            Reset to Built-in Rules 1-22
+          </button>
+          <button onclick="processCustomImport()" class="px-6 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold shadow-lg shadow-brand-600/30 transition">
+            <i class="fa-solid fa-file-circle-check"></i> Import & Play
+          </button>
+        </div>
+
+        <div id="import-status" class="hidden p-4 rounded-xl text-sm font-medium"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 bg-slate-950 py-4 mt-8">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
+      LexMemoria • Rules 1 to 22 Legal Memory Drill • Single File Web App
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-20 right-5 z-50 flex flex-col gap-2"></div>
+
+  <script>
+    /**
+     * BUILT-IN DATABASE: Rules 1 through 22 of the Rules of Court (Civil Procedure)
+     * Every section includes a unique legal keyword and a hint clue for fill-in-the-blank mode.
+     */
+    const BUILTIN_RULES_DATA = [
+      {
+        rule: "Rule 1",
+        title: "General Provisions",
+        sections: [
+          {
+            section: "Sec. 3",
+            title: "Cases governed",
+            text: "A civil action is one by which a party sues another for the enforcement or protection of a right, or the prevention or redress of a wrong.",
+            keyword: "civil action",
+            hint: "An action by which a party sues another for enforcement/protection of a right"
+          },
+          {
+            section: "Sec. 6",
+            title: "Construction",
+            text: "These Rules shall be liberally construed in order to promote their objective of securing a just, speedy and inexpensive disposition of every action and proceeding.",
+            keyword: "liberally",
+            hint: "How these Rules should be construed to promote a just and speedy disposition"
+          }
+        ]
+      },
+      {
+        rule: "Rule 2",
+        title: "Cause of Action",
+        sections: [
+          {
+            section: "Sec. 2",
+            title: "Cause of action defined",
+            text: "A cause of action is the act or omission by which a party violates a right of another.",
+            keyword: "cause of action",
+            hint: "The act or omission by which a party violates a right of another"
+          },
+          {
+            section: "Sec. 5",
+            title: "Joinder of causes of action",
+            text: "A party may in one pleading assert, in the alternative or otherwise, as many causes of action as he may have against an opposing party.",
+            keyword: "joinder",
+            hint: "The act of asserting multiple causes of action in a single pleading"
+          }
+        ]
+      },
+      {
+        rule: "Rule 3",
+        title: "Parties to Civil Actions",
+        sections: [
+          {
+            section: "Sec. 2",
+            title: "Real party in interest",
+            text: "A real party in interest is the party who stands to be benefited or injured by the judgment in the suit.",
+            keyword: "real party in interest",
+            hint: "The party who stands to be benefited or injured by the judgment"
+          },
+          {
+            section: "Sec. 7",
+            title: "Compulsory joinder of indispensable parties",
+            text: "Parties in interest without whom no final determination can be had of an action shall be joined as plaintiffs or defendants.",
+            keyword: "indispensable",
+            hint: "Parties without whom NO final determination can be had"
+          }
+        ]
+      },
+      {
+        rule: "Rule 4",
+        title: "Venue of Actions",
+        sections: [
+          {
+            section: "Sec. 1",
+            title: "Venue of real actions",
+            text: "Actions affecting title to or possession of real property, or interest therein, shall be commenced and tried in the proper court which has jurisdiction over the area wherein the real property involved is situated.",
+            keyword: "real actions",
+            hint: "Actions affecting title to or possession of real property"
+          },
+          {
+            section: "Sec. 2",
+            title: "Venue of personal actions",
+            text: "All other actions may be commenced and tried where the plaintiff or any of the principal plaintiffs resides, or where the defendant resides.",
+            keyword: "personal actions",
+            hint: "Actions brought where either plaintiff or defendant resides"
+          }
+        ]
+      },
+      {
+        rule: "Rule 5",
+        title: "Uniform Procedure in Trial Courts",
+        sections: [
+          {
+            section: "Sec. 1",
+            title: "Uniform procedure",
+            text: "The procedure in the Municipal Trial Courts shall be the same as that in the Regional Trial Courts, except where a particular provision expressly applies only to MTCs.",
+            keyword: "uniform",
+            hint: "The standardized nature of procedure across MTCs and RTCs"
+          }
+        ]
+      },
+      {
+        rule: "Rule 6",
+        title: "Kinds of Pleadings",
+        sections: [
+          {
+            section: "Sec. 3",
+            title: "Complaint",
+            text: "The complaint is the pleading alleging the plaintiff's cause or causes of action.",
+            keyword: "complaint",
+            hint: "The initiating pleading alleging the plaintiff's cause of action"
+          },
+          {
+            section: "Sec. 7",
+            title: "Compulsory counterclaim",
+            text: "A compulsory counterclaim is one which, being cognizable by the regular courts of justice, arises out of or is connected with the transaction or occurrence constituting the subject matter of the opposing party's claim.",
+            keyword: "compulsory counterclaim",
+            hint: "A claim arising out of the same transaction or occurrence that is barred if not set up"
+          }
+        ]
+      },
+      {
+        rule: "Rule 7",
+        title: "Parts and Contents of a Pleading",
+        sections: [
+          {
+            section: "Sec. 4",
+            title: "Verification",
+            text: "A pleading is verified by an affidavit that the affiant has read the pleading and that the allegations therein are true and correct of his personal knowledge or based on authentic records.",
+            keyword: "verification",
+            hint: "Affidavit attesting that affiant read the pleading and allegations are true"
+          },
+          {
+            section: "Sec. 5",
+            title: "Certification against forum shopping",
+            text: "The plaintiff shall certify under oath that he has not commenced any other action involving the same issues in any court or tribunal.",
+            keyword: "forum shopping",
+            hint: "The prohibited practice of filing multiple suits involving the same issues"
+          }
+        ]
+      },
+      {
+        rule: "Rule 8",
+        title: "Manner of Making Allegations in Pleadings",
+        sections: [
+          {
+            section: "Sec. 5",
+            title: "Fraud, mistake, condition of the mind",
+            text: "In all averments of fraud or mistake, the circumstances constituting fraud or mistake must be stated with particularity.",
+            keyword: "particularity",
+            hint: "How circumstances of fraud or mistake must be specifically stated"
+          },
+          {
+            section: "Sec. 10",
+            title: "Specific denial",
+            text: "A defendant must specify each material allegation of fact the truth of which he does not admit and setting forth the matter on which he relies.",
+            keyword: "specific denial",
+            hint: "The required manner of denying material allegations explicitly rather than generally"
+          }
+        ]
+      },
+      {
+        rule: "Rule 9",
+        title: "Effect of Failure to Plead",
+        sections: [
+          {
+            section: "Sec. 3",
+            title: "Default; Declaration of",
+            text: "If the defending party fails to answer within the time allowed therefor, the court shall, upon motion of the claiming party and proof of such failure, declare the defending party in default.",
+            keyword: "default",
+            hint: "The status declared when a defending party fails to answer within time"
+          }
+        ]
+      },
+      {
+        rule: "Rule 10",
+        title: "Amended and Supplemental Pleadings",
+        sections: [
+          {
+            section: "Sec. 2",
+            title: "Amendments as a matter of right",
+            text: "A party may amend his pleading once as a matter of right at any time before a responsive pleading is served.",
+            keyword: "matter of right",
+            hint: "Amendment privilege exercised once before a responsive pleading is served"
+          }
+        ]
+      },
+      {
+        rule: "Rule 11",
+        title: "When to File Responsive Pleadings",
+        sections: [
+          {
+            section: "Sec. 1",
+            title: "Answer to the complaint",
+            text: "The defendant shall file his answer to the complaint within thirty (30) calendar days after service of summons, unless a different period is fixed by the court.",
+            keyword: "thirty",
+            hint: "Number of calendar days to file answer after summons service under amended rules"
+          }
+        ]
+      },
+      {
+        rule: "Rule 12",
+        title: "Bill of Particulars",
+        sections: [
+          {
+            section: "Sec. 1",
+            title: "When applied for; purpose",
+            text: "Before responding to a pleading, a party may move for a bill of particulars to enable him properly to prepare his responsive pleading.",
+            keyword: "bill of particulars",
+            hint: "Motion filed to clarify vague or ambiguous allegations in a pleading"
+          }
+        ]
+      },
+      {
+        rule: "Rule 13",
+        title: "Filing and Service of Pleadings",
+        sections: [
+          {
+            section: "Sec. 14",
+            title: "Conventional service",
+            text: "Conventional service or filing of pleadings shall be made by presenting the original personally to the clerk or sending it by registered mail.",
+            keyword: "conventional",
+            hint: "Traditional non-electronic method of filing or serving documents"
+          }
+        ]
+      },
+      {
+        rule: "Rule 14",
+        title: "Summons",
+        sections: [
+          {
+            section: "Sec. 6",
+            title: "Substituted service",
+            text: "If personal service cannot be effected within a reasonable time, service may be made by leaving copies at defendant's residence with a person of suitable age and discretion.",
+            keyword: "substituted service",
+            hint: "Alternative service effected by leaving copies at residence or office"
+          },
+          {
+            section: "Sec. 16",
+            title: "Extraterritorial service",
+            text: "When the defendant does not reside and is not found in the Philippines, service may, by leave of court, be effected out of the Philippines.",
+            keyword: "extraterritorial",
+            hint: "Service of summons conducted outside the physical territory of the Philippines"
+          }
+        ]
+      },
+      {
+        rule: "Rule 15",
+        title: "Motions",
+        sections: [
+          {
+            section: "Sec. 8",
+            title: "Omnibus motion",
+            text: "Subject to the provisions of section 1 of Rule 9, a motion attacking a pleading, order, judgment, or proceeding shall include all objections then available.",
+            keyword: "omnibus motion",
+            hint: "A motion required to include ALL available objections at one time"
+          }
+        ]
+      },
+      {
+        rule: "Rule 16",
+        title: "Affirmative Defenses (Formerly Motion to Dismiss)",
+        sections: [
+          {
+            section: "Sec. 1",
+            title: "Grounds for Affirmative Defenses",
+            text: "Affirmative defenses include lack of jurisdiction, litis pendentia, res judicata, prescription, and failure to state a cause of action.",
+            keyword: "litis pendentia",
+            hint: "Affirmative defense ground referring to pendency of another action between same parties"
+          }
+        ]
+      },
+      {
+        rule: "Rule 17",
+        title: "Dismissal of Actions",
+        sections: [
+          {
+            section: "Sec. 3",
+            title: "Dismissal due to fault of plaintiff",
+            text: "If plaintiff fails to appear on the date of the presentation of his evidence, or to prosecute his action for an unreasonable length of time, the action may be dismissed.",
+            keyword: "failure to prosecute",
+            hint: "Ground for dismissal when plaintiff unreasonably delays or abandons the case"
+          }
+        ]
+      },
+      {
+        rule: "Rule 18",
+        title: "Pre-Trial",
+        sections: [
+          {
+            section: "Sec. 6",
+            title: "Pre-trial brief",
+            text: "The parties shall file with the court and serve on the adverse party their respective pre-trial briefs at least three (3) calendar days before the pre-trial.",
+            keyword: "pre-trial brief",
+            hint: "Mandatory document filed by parties detailing admissions, witnesses, and evidence prior to pre-trial"
+          }
+        ]
+      },
+      {
+        rule: "Rule 19",
+        title: "Intervention",
+        sections: [
+          {
+            section: "Sec. 1",
+            title: "Who may intervene",
+            text: "A person who has a legal interest in the matter in litigation may, with leave of court, be allowed to intervene in the action.",
+            keyword: "intervention",
+            hint: "Procedure by which a third party enters a pending lawsuit to protect a legal interest"
+          }
+        ]
+      },
+      {
+        rule: "Rule 20",
+        title: "Calendar of Cases",
+        sections: [
+          {
+            section: "Sec. 1",
+            title: "Calendar of cases",
+            text: "The clerk of court shall keep a calendar of cases for trial which shall provide for the preference of cases given by law.",
+            keyword: "calendar of cases",
+            hint: "Official court schedule listing cases set for trial"
+          }
+        ]
+      },
+      {
+        rule: "Rule 21",
+        title: "Subpoena",
+        sections: [
+          {
+            section: "Sec. 1",
+            title: "Subpoena duces tecum",
+            text: "A subpoena duces tecum is a process directed to a person requiring him to bring with him any books, documents, or other things under his control.",
+            keyword: "subpoena duces tecum",
+            hint: "Process commanding a witness to bring documents or books to court"
+          }
+        ]
+      },
+      {
+        rule: "Rule 22",
+        title: "Computation of Time",
+        sections: [
+          {
+            section: "Sec. 1",
+            title: "How computed",
+            text: "In computing any period of time prescribed by these Rules, the day of the act or event from which the designated period of time begins to run is to be excluded and the date of performance included.",
+            keyword: "excluded",
+            hint: "Whether the first day of the event is excluded or included in computing legal deadlines"
+          }
+        ]
+      }
+    ];
+
+    // Global Application State
+    let activeRulesDataset = [...BUILTIN_RULES_DATA];
+    let customDataset = [];
+    let currentMode = 'TAGGING'; // 'TAGGING' or 'FILL_IN_BLANK'
+    let currentRangeFilter = 'ALL';
+
+    let sessionStats = {
+      score: 0,
+      roundsCompleted: 0,
+      streak: 0,
+      totalCorrect: 0,
+    };
+
+    // Mode A (Tagging) State
+    let currentTaggingRound = {
+      targetRule: null,
+      options: [],
+      submitted: false
+    };
+
+    // Mode B (Fill-in-the-Blank) State
+    let currentFillRound = {
+      ruleObj: null,
+      secObj: null,
+      promptTextWithBlank: "",
+      targetKeyword: "",
+      hintText: "",
+      hintUsed: false,
+      submitted: false
+    };
+
+    let soundEnabled = true;
+
+    // Web Audio Synthesizer
+    class SoundEngine {
+      constructor() { this.ctx = null; }
+      init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }
+      playTone(freq, type = 'sine', duration = 0.1, gainVal = 0.1) {
+        if (!soundEnabled) return;
+        try {
+          this.init();
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch(e) {}
+      }
+      playSelect() { this.playTone(523.25, 'sine', 0.08, 0.08); }
+      playUnselect() { this.playTone(392.00, 'sine', 0.08, 0.06); }
+      playCorrect() {
+        if (!soundEnabled) return;
+        this.playTone(523.25, 'triangle', 0.12, 0.1);
+        setTimeout(() => this.playTone(659.25, 'triangle', 0.12, 0.1), 80);
+        setTimeout(() => this.playTone(783.99, 'triangle', 0.2, 0.12), 160);
+      }
+      playError() {
+        if (!soundEnabled) return;
+        this.playTone(220, 'sawtooth', 0.15, 0.1);
+        setTimeout(() => this.playTone(185, 'sawtooth', 0.25, 0.12), 100);
+      }
+    }
+    const sounds = new SoundEngine();
+
+    // FILTER ELIGIBLE DATASET
+    function getFilteredRules() {
+      if (currentRangeFilter === 'ALL') return activeRulesDataset;
+      
+      return activeRulesDataset.filter(r => {
+        const num = parseInt(r.rule.replace(/\D/g, ''), 10);
+        if (isNaN(num)) return true; // Include custom if no rule number
+
+        if (currentRangeFilter === 'RULES_1_5') return num >= 1 && num <= 5;
+        if (currentRangeFilter === 'RULES_6_12') return num >= 6 && num <= 12;
+        if (currentRangeFilter === 'RULES_13_17') return num >= 13 && num <= 17;
+        if (currentRangeFilter === 'RULES_18_22') return num >= 18 && num <= 22;
+        return true;
+      });
+    }
+
+    /**
+     * GENERATE NEXT ROUND (Dispatches according to current mode)
+     */
+    function generateNextRound() {
+      const eligibleRules = getFilteredRules();
+
+      if (eligibleRules.length === 0) {
+        showToast('No rules match the selected scope. Resetting filter to ALL.', 'error');
+        currentRangeFilter = 'ALL';
+        document.getElementById('rule-range-filter').value = 'ALL';
+        return generateNextRound();
+      }
+
+      if (currentMode === 'TAGGING') {
+        setupModeATagging(eligibleRules);
+      } else {
+        setupModeBFillInBlank(eligibleRules);
+      }
+    }
+
+    /**
+     * MODE A: RULE & PROVISION TAGGING DRILL
+     */
+    function setupModeATagging(eligibleRules) {
+      const targetRule = eligibleRules[Math.floor(Math.random() * eligibleRules.length)];
+
+      // Pick target provisions
+      const correctSections = targetRule.sections.map(sec => ({
+        id: 'opt_' + Math.random().toString(36).substr(2, 9),
+        section: sec.section,
+        title: sec.title,
+        text: sec.text,
+        actualRule: `${targetRule.rule}: ${targetRule.title}`,
+        isTarget: true,
+        isSelected: false
+      }));
+
+      const numCorrect = Math.min(correctSections.length, Math.floor(Math.random() * 2) + 1);
+      const selectedCorrect = shuffleArray(correctSections).slice(0, numCorrect);
+
+      // Distractors
+      const otherRules = activeRulesDataset.filter(r => r.rule !== targetRule.rule);
+      let distractorPool = [];
+      otherRules.forEach(r => {
+        r.sections.forEach(sec => {
+          distractorPool.push({
+            id: 'opt_' + Math.random().toString(36).substr(2, 9),
+            section: sec.section,
+            title: sec.title,
+            text: sec.text,
+            actualRule: `${r.rule}: ${r.title}`,
+            isTarget: false,
+            isSelected: false
+          });
+        });
+      });
+
+      const numDistractors = Math.min(distractorPool.length, 3);
+      const selectedDistractors = shuffleArray(distractorPool).slice(0, numDistractors);
+
+      const options = shuffleArray([...selectedCorrect, ...selectedDistractors]);
+
+      currentTaggingRound = {
+        targetRule: targetRule,
+        options: options,
+        submitted: false
+      };
+
+      // UI Rendering
+      document.getElementById('target-category-badge').textContent = 'Civil Procedure';
+      document.getElementById('target-rule-title').textContent = `${targetRule.rule}: ${targetRule.title}`;
+      document.getElementById('tagging-rule-badge').textContent = targetRule.rule;
+
+      document.getElementById('btn-tagging-submit').classList.remove('hidden');
+      document.getElementById('btn-tagging-next').classList.add('hidden');
+      document.getElementById('tagging-feedback-text').innerHTML = `
+        <i class="fa-solid fa-circle-info text-brand-400"></i>
+        <span>Select all provisions below that belong under <strong>${targetRule.rule}</strong>.</span>
+      `;
+
+      const grid = document.getElementById('tiles-grid');
+      grid.innerHTML = '';
+
+      options.forEach(opt => {
+        const tile = document.createElement('div');
+        tile.id = opt.id;
+        tile.onclick = () => toggleTileSelection(opt.id);
+        tile.className = 'tile-transition cursor-pointer relative bg-slate-900/90 border-2 border-slate-800 hover:border-slate-700 rounded-2xl p-5 flex flex-col justify-between group';
+
+        tile.innerHTML = `
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-xs font-mono text-slate-300 font-medium">
+                <i class="fa-solid fa-bookmark text-brand-400 text-[10px]"></i>
+                ${opt.section}
+              </span>
+              <div id="badge-${opt.id}" class="w-6 h-6 rounded-full border-2 border-slate-700 text-transparent flex items-center justify-center">
+                <i class="fa-solid fa-check text-xs"></i>
+              </div>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-100 text-base leading-snug group-hover:text-brand-300 transition">${opt.title}</h3>
+              <p class="text-xs text-slate-400 mt-2 line-clamp-3 leading-relaxed">"${opt.text}"</p>
+            </div>
+          </div>
+          <div id="eval-${opt.id}" class="hidden mt-4 pt-3 border-t border-slate-800 text-xs"></div>
+        `;
+        grid.appendChild(tile);
+      });
+    }
+
+    function toggleTileSelection(optId) {
+      if (currentTaggingRound.submitted) return;
+      const option = currentTaggingRound.options.find(o => o.id === optId);
+      if (!option) return;
+
+      option.isSelected = !option.isSelected;
+      const tile = document.getElementById(optId);
+      const badge = document.getElementById(`badge-${optId}`);
+
+      if (option.isSelected) {
+        sounds.playSelect();
+        tile.className = 'tile-transition cursor-pointer relative bg-brand-950/20 border-2 border-brand-500 shadow-lg shadow-brand-500/10 rounded-2xl p-5 flex flex-col justify-between group scale-[1.01]';
+        badge.className = 'w-6 h-6 rounded-full border-2 bg-brand-500 border-brand-400 text-white flex items-center justify-center shadow-sm';
+      } else {
+        sounds.playUnselect();
+        tile.className = 'tile-transition cursor-pointer relative bg-slate-900/90 border-2 border-slate-800 hover:border-slate-700 rounded-2xl p-5 flex flex-col justify-between group';
+        badge.className = 'w-6 h-6 rounded-full border-2 border-slate-700 text-transparent flex items-center justify-center';
+      }
+    }
+
+    function evaluateTaggingAnswer() {
+      if (currentTaggingRound.submitted) return;
+      currentTaggingRound.submitted = true;
+
+      const { targetRule, options } = currentTaggingRound;
+      let perfect = true;
+
+      options.forEach(opt => {
+        const tile = document.getElementById(opt.id);
+        const evalBox = document.getElementById(`eval-${opt.id}`);
+        const badge = document.getElementById(`badge-${opt.id}`);
+        evalBox.classList.remove('hidden');
+
+        if (opt.isTarget && opt.isSelected) {
+          tile.className = 'tile-transition bg-emerald-950/20 border-2 border-emerald-500 rounded-2xl p-5 flex flex-col justify-between shadow-lg shadow-emerald-950/30';
+          badge.className = 'w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold';
+          evalBox.className = 'mt-4 pt-3 border-t border-emerald-500/30 text-xs text-emerald-400 font-semibold flex items-center gap-1.5';
+          evalBox.innerHTML = `<i class="fa-solid fa-circle-check"></i> Correctly tagged under ${targetRule.rule}`;
+        } else if (!opt.isTarget && opt.isSelected) {
+          perfect = false;
+          tile.className = 'tile-transition bg-rose-950/20 border-2 border-rose-500 rounded-2xl p-5 flex flex-col justify-between shadow-lg shadow-rose-950/30';
+          badge.className = 'w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold';
+          evalBox.className = 'mt-4 pt-3 border-t border-rose-500/30 text-xs text-rose-400 font-medium flex flex-col gap-0.5';
+          evalBox.innerHTML = `<span class="font-bold flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Wrong Rule</span><span>Belongs under: <strong class="text-white">${opt.actualRule}</strong></span>`;
+        } else if (opt.isTarget && !opt.isSelected) {
+          perfect = false;
+          tile.className = 'tile-transition bg-amber-950/20 border-2 border-amber-400 border-dashed rounded-2xl p-5 flex flex-col justify-between';
+          badge.className = 'w-6 h-6 rounded-full border-2 border-amber-400 text-amber-400 flex items-center justify-center font-bold';
+          badge.innerHTML = '!';
+          evalBox.className = 'mt-4 pt-3 border-t border-amber-500/30 text-xs text-amber-300 font-medium flex flex-col gap-0.5';
+          evalBox.innerHTML = `<span class="font-bold flex items-center gap-1"><i class="fa-solid fa-triangle-exclamation"></i> Missed Provision</span><span>This section belongs under <strong class="text-white">${targetRule.rule}</strong></span>`;
+        } else {
+          tile.className = 'tile-transition bg-slate-900/40 border-2 border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between opacity-70';
+          evalBox.className = 'mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-500 italic';
+          evalBox.textContent = `Distractor from ${opt.actualRule.split(':')[0]}`;
+        }
+      });
+
+      sessionStats.roundsCompleted++;
+      if (perfect) {
+        sessionStats.streak++;
+        sessionStats.score += 100 + (sessionStats.streak * 10);
+        sounds.playCorrect();
+        showToast('Perfect Tagging! +100 Points', 'success');
+      } else {
+        sessionStats.streak = 0;
+        sounds.playError();
+        showToast('Incorrect tagging. Review rule locations.', 'error');
+      }
+
+      document.getElementById('btn-tagging-submit').classList.add('hidden');
+      document.getElementById('btn-tagging-next').classList.remove('hidden');
+      updateStatsUI();
+    }
+
+
+    /**
+     * MODE B: FILL-IN-THE-BLANK KEYWORD RECALL
+     */
+    function setupModeBFillInBlank(eligibleRules) {
+      // Pick random rule and section
+      const randomRule = eligibleRules[Math.floor(Math.random() * eligibleRules.length)];
+      const randomSec = randomRule.sections[Math.floor(Math.random() * randomRule.sections.length)];
+
+      const keyword = randomSec.keyword;
+      const originalText = randomSec.text;
+
+      // Replace keyword in text (case insensitive)
+      const regex = new RegExp(`\\b${escapeRegExp(keyword)}\\b`, 'gi');
+      const textWithBlank = originalText.replace(regex, `<span class="px-3 py-1 mx-1 rounded-lg bg-indigo-500/20 text-indigo-300 font-mono font-bold border-2 border-dashed border-indigo-500/50">[ ____________ ]</span>`);
+
+      currentFillRound = {
+        ruleObj: randomRule,
+        secObj: randomSec,
+        promptTextWithBlank: textWithBlank,
+        targetKeyword: keyword.trim().toLowerCase(),
+        hintText: randomSec.hint || `Starts with "${keyword[0].toUpperCase()}" and has ${keyword.length} characters.`,
+        hintUsed: false,
+        submitted: false
+      };
+
+      // Reset UI
+      document.getElementById('fill-rule-badge').textContent = `${randomRule.rule}: ${randomRule.title}`;
+      document.getElementById('fill-section-badge').textContent = randomSec.section;
+      document.getElementById('fill-prompt-title').textContent = `${randomSec.title} (${randomSec.section})`;
+      document.getElementById('fill-prompt-text').innerHTML = textWithBlank;
+      
+      const userInput = document.getElementById('fill-user-input');
+      userInput.value = '';
+      userInput.disabled = false;
+      userInput.className = 'flex-1 bg-slate-950 border-2 border-slate-700 focus:border-indigo-500 rounded-xl px-4 py-3 text-base text-white outline-none font-mono tracking-wide placeholder:text-slate-600 transition';
+      userInput.focus();
+
+      document.getElementById('fill-hint-box').classList.add('hidden');
+      document.getElementById('btn-fill-hint').classList.remove('hidden');
+      document.getElementById('fill-result-banner').classList.add('hidden');
+
+      document.getElementById('btn-fill-submit').classList.remove('hidden');
+      document.getElementById('btn-fill-next').classList.add('hidden');
+    }
+
+    /**
+     * Hint Request with Penalty
+     */
+    function requestFillHint() {
+      if (currentFillRound.submitted) return;
+
+      currentFillRound.hintUsed = true;
+      const hintBox = document.getElementById('fill-hint-box');
+      const hintContent = document.getElementById('fill-hint-content');
+
+      const kw = currentFillRound.targetKeyword;
+      const letterHint = `Clue: ${currentFillRound.hintText} | Format: "${kw[0].toUpperCase()}${kw.slice(1).replace(/[a-z]/g, ' • ')}"`;
+
+      hintContent.textContent = letterHint;
+      hintBox.classList.remove('hidden');
+
+      sounds.playSelect();
+      showToast('Hint revealed! 50% Point Penalty applied for this answer.', 'info');
+    }
+
+    /**
+     * Evaluate Fill-in-the-Blank User Input
+     */
+    function evaluateFillAnswer() {
+      if (currentFillRound.submitted) return;
+
+      const userInput = document.getElementById('fill-user-input').value.trim().toLowerCase();
+      const target = currentFillRound.targetKeyword;
+      const resultBanner = document.getElementById('fill-result-banner');
+      const inputEl = document.getElementById('fill-user-input');
+
+      if (!userInput) {
+        showToast('Please type your answer before submitting.', 'error');
+        return;
+      }
+
+      currentFillRound.submitted = true;
+      inputEl.disabled = true;
+
+      // Smart String Match (allows minor whitespace/punctuation flexibility)
+      const cleanUser = userInput.replace(/[^\w\s]/gi, '');
+      const cleanTarget = target.replace(/[^\w\s]/gi, '');
+      const isCorrect = (cleanUser === cleanTarget);
+
+      sessionStats.roundsCompleted++;
+      resultBanner.classList.remove('hidden');
+
+      if (isCorrect) {
+        // Points calculation with hint penalty
+        let baseEarned = 100;
+        if (currentFillRound.hintUsed) {
+          baseEarned = 50; // 50% penalty
+        }
+
+        sessionStats.streak++;
+        sessionStats.score += baseEarned + (sessionStats.streak * 5);
+        sounds.playCorrect();
+
+        inputEl.className = 'flex-1 bg-emerald-950/30 border-2 border-emerald-500 rounded-xl px-4 py-3 text-base text-emerald-300 font-mono tracking-wide';
+        resultBanner.className = 'p-4 rounded-xl border bg-emerald-950/40 border-emerald-500/50 text-emerald-300 font-semibold space-y-1';
+        resultBanner.innerHTML = `
+          <div class="flex items-center gap-2 text-base">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i> Correct Keyword Match! (+${baseEarned} pts)
+          </div>
+          <p class="text-xs text-slate-300">Target Legal Term: <strong class="text-white font-mono">${currentFillRound.targetKeyword}</strong></p>
+        `;
+        showToast(`Correct! +${baseEarned} Points`, 'success');
+
+      } else {
+        sessionStats.streak = 0;
+        sounds.playError();
+
+        inputEl.className = 'flex-1 bg-rose-950/30 border-2 border-rose-500 rounded-xl px-4 py-3 text-base text-rose-300 font-mono tracking-wide';
+        resultBanner.className = 'p-4 rounded-xl border bg-rose-950/40 border-rose-500/50 text-rose-300 font-semibold space-y-1';
+        resultBanner.innerHTML = `
+          <div class="flex items-center gap-2 text-base">
+            <i class="fa-solid fa-circle-xmark text-rose-400"></i> Incorrect Keyword
+          </div>
+          <p class="text-xs text-slate-300">Expected Legal Term: <strong class="text-white font-mono bg-slate-900 px-2 py-0.5 rounded border border-slate-700">${currentFillRound.targetKeyword}</strong></p>
+          <p class="text-xs text-slate-400">Full Provision Context: "${currentFillRound.secObj.text}"</p>
+        `;
+        showToast('Incorrect legal term. Review context above.', 'error');
+      }
+
+      document.getElementById('btn-fill-submit').classList.add('hidden');
+      document.getElementById('btn-fill-next').classList.remove('hidden');
+      updateStatsUI();
+    }
+
+
+    function switchPracticeMode(mode) {
+      currentMode = mode;
+      const taggingContainer = document.getElementById('mode-tagging-container');
+      const fillContainer = document.getElementById('mode-fill-container');
+      const btnTagging = document.getElementById('mode-btn-tagging');
+      const btnFill = document.getElementById('mode-btn-fill');
+
+      if (mode === 'TAGGING') {
+        taggingContainer.classList.remove('hidden');
+        fillContainer.classList.add('hidden');
+        btnTagging.className = 'px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition flex items-center gap-2 bg-brand-600 text-white shadow';
+        btnFill.className = 'px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition flex items-center gap-2 text-slate-400 hover:text-white';
+      } else {
+        taggingContainer.classList.add('hidden');
+        fillContainer.classList.remove('hidden');
+        btnFill.className = 'px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition flex items-center gap-2 bg-indigo-600 text-white shadow';
+        btnTagging.className = 'px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition flex items-center gap-2 text-slate-400 hover:text-white';
+      }
+
+      generateNextRound();
+    }
+
+    function onRuleRangeFilterChange() {
+      currentRangeFilter = document.getElementById('rule-range-filter').value;
+      generateNextRound();
+      updateStatsUI();
+    }
+
+    function updateStatsUI() {
+      document.getElementById('stat-score').textContent = `${sessionStats.score} pts`;
+      document.getElementById('stat-streak').textContent = sessionStats.streak;
+      document.getElementById('stat-rounds').textContent = sessionStats.roundsCompleted;
+
+      const filtered = getFilteredRules();
+      document.getElementById('stat-pool').textContent = `${filtered.length} Rules`;
+    }
+
+    function resetStats() {
+      sessionStats = { score: 0, roundsCompleted: 0, streak: 0, totalCorrect: 0 };
+      updateStatsUI();
+      showToast('Scores & streak reset.', 'info');
+      generateNextRound();
+    }
+
+    /**
+     * Render Rules 1-22 Accordion Deck
+     */
+    function renderRulesLibrary() {
+      const container = document.getElementById('rules-accordion-container');
+      container.innerHTML = '';
+
+      activeRulesDataset.forEach((ruleObj, index) => {
+        const item = document.createElement('div');
+        item.className = 'bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden';
+
+        const sectionsHtml = ruleObj.sections.map(sec => `
+          <div class="p-3.5 bg-slate-950/60 rounded-xl border border-slate-800 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-brand-500/20 text-brand-300 font-mono text-xs font-semibold">${sec.section}</span>
+                <h4 class="text-sm font-bold text-slate-200">${sec.title}</h4>
+              </div>
+              <span class="text-[11px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                Keyword: ${sec.keyword}
+              </span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">${sec.text}</p>
+          </div>
+        `).join('');
+
+        item.innerHTML = `
+          <div onclick="toggleAccordion(${index})" class="p-4 bg-slate-900 hover:bg-slate-800/60 cursor-pointer flex items-center justify-between transition">
+            <div class="flex items-center space-x-3">
+              <span class="px-3 py-1 rounded-xl bg-brand-600/20 text-brand-300 border border-brand-500/30 text-xs font-mono font-bold">
+                ${ruleObj.rule}
+              </span>
+              <div>
+                <h3 class="text-base font-bold text-white leading-snug">${ruleObj.title}</h3>
+                <span class="text-xs text-slate-400">${ruleObj.sections.length} Provisions Loaded</span>
+              </div>
+            </div>
+            <i id="accordion-icon-${index}" class="fa-solid fa-chevron-down text-slate-500 transition-transform duration-200"></i>
+          </div>
+
+          <div id="accordion-body-${index}" class="hidden p-4 border-t border-slate-800 bg-slate-900/50 space-y-3">
+            ${sectionsHtml}
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function toggleAccordion(index) {
+      const body = document.getElementById(`accordion-body-${index}`);
+      const icon = document.getElementById(`accordion-icon-${index}`);
+      if (body.classList.contains('hidden')) {
+        body.classList.remove('hidden');
+        icon.style.transform = 'rotate(180deg)';
+      } else {
+        body.classList.add('hidden');
+        icon.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    function filterRulesList() {
+      const query = document.getElementById('rules-search-input').value.toLowerCase();
+      const items = document.getElementById('rules-accordion-container').children;
+      Array.from(items).forEach(item => {
+        item.classList.toggle('hidden', !item.textContent.toLowerCase().includes(query));
+      });
+    }
+
+    /**
+     * CSV/TSV DATA IMPORTER
+     */
+    function processCustomImport() {
+      const rawText = document.getElementById('import-textarea').value.trim();
+      if (!rawText) {
+        showToast('Please paste data before submitting.', 'error');
+        return;
+      }
+
+      try {
+        const lines = rawText.split(/\r?\n/);
+        const parsedMap = new Map();
+
+        lines.forEach(line => {
+          if (!line.trim()) return;
+          let cols = line.includes('\t') ? line.split('\t') : line.split(',');
+          cols = cols.map(c => c.trim().replace(/^"(.*)"$/, '$1'));
+
+          if (cols.length >= 3) {
+            const ruleKey = cols[0];
+            const secNum = cols[1];
+            const text = cols[2];
+            const keyword = cols[3] || 'provision';
+            const hint = cols[4] || `Key term in ${secNum}`;
+
+            if (!parsedMap.has(ruleKey)) {
+              parsedMap.set(ruleKey, {
+                rule: ruleKey,
+                title: 'Custom Import Rule',
+                sections: []
+              });
+            }
+
+            parsedMap.get(ruleKey).sections.push({
+              section: secNum,
+              title: secNum,
+              text: text,
+              keyword: keyword,
+              hint: hint
+            });
+          }
+        });
+
+        const newRules = Array.from(parsedMap.values());
+        if (newRules.length === 0) {
+          showToast('Failed to parse columns. Check format.', 'error');
+          return;
+        }
+
+        activeRulesDataset = [...BUILTIN_RULES_DATA, ...newRules];
+        showToast(`Successfully imported ${newRules.length} rules!`, 'success');
+
+        switchTab('practice');
+        generateNextRound();
+        renderRulesLibrary();
+
+      } catch (e) {
+        showToast('Error importing data: ' + e.message, 'error');
+      }
+    }
+
+    function clearCustomData() {
+      activeRulesDataset = [...BUILTIN_RULES_DATA];
+      document.getElementById('import-textarea').value = '';
+      showToast('Reset to built-in Rules 1 to 22.', 'info');
+      renderRulesLibrary();
+      generateNextRound();
+    }
+
+    // Navigation Switcher
+    function switchTab(tabName) {
+      document.getElementById('tab-practice-view').classList.toggle('hidden', tabName !== 'practice');
+      document.getElementById('tab-rules-view').classList.toggle('hidden', tabName !== 'rules');
+      document.getElementById('tab-import-view').classList.toggle('hidden', tabName !== 'import');
+
+      document.getElementById('nav-practice').className = tabName === 'practice' ? 'px-4 py-1.5 rounded-lg text-sm font-medium text-white bg-brand-600 shadow-sm transition-all flex items-center gap-2' : 'px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition-all flex items-center gap-2';
+      document.getElementById('nav-rules').className = tabName === 'rules' ? 'px-4 py-1.5 rounded-lg text-sm font-medium text-white bg-brand-600 shadow-sm transition-all flex items-center gap-2' : 'px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition-all flex items-center gap-2';
+      document.getElementById('nav-import').className = tabName === 'import' ? 'px-4 py-1.5 rounded-lg text-sm font-medium text-white bg-brand-600 shadow-sm transition-all flex items-center gap-2' : 'px-4 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition-all flex items-center gap-2';
+
+      if (tabName === 'rules') renderRulesLibrary();
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('sound-icon').className = soundEnabled ? 'fa-solid fa-volume-high text-base text-brand-400' : 'fa-solid fa-volume-xmark text-base text-slate-500';
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    }
+
+    function shuffleArray(arr) {
+      const array = [...arr];
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function escapeRegExp(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      let style = 'bg-slate-800 text-slate-200 border-slate-700';
+      if (type === 'success') style = 'bg-slate-900 text-emerald-300 border-emerald-500/50 shadow-lg';
+      if (type === 'error') style = 'bg-slate-900 text-rose-300 border-rose-500/50 shadow-lg';
+
+      toast.className = `flex items-center space-x-2 px-4 py-3 rounded-xl border ${style} text-xs font-semibold transition-all duration-300`;
+      toast.innerHTML = `<span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    window.onload = function() {
+      generateNextRound();
+      updateStatsUI();
+    };
+  </script>
+</body>
+</html>
