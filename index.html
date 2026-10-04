@@ -139,7 +139,7 @@
     <div id="tab-practice-view" class="space-y-6">
       
       <!-- Stats Summary Strip -->
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div class="grid grid-cols-2 md:grid-cols-6 gap-3">
         <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex items-center space-x-3">
           <div class="p-2.5 rounded-lg bg-court-gold/10 text-court-gold border border-court-gold/20">
             <i class="fa-solid fa-star text-lg"></i>
@@ -187,6 +187,21 @@
           <div>
             <div class="text-xs text-slate-400">Active Pool</div>
             <div id="stat-pool" class="text-lg font-bold text-white font-mono">Rules 1-22</div>
+          </div>
+        </div>
+
+        <div class="col-span-2 md:col-span-1 bg-slate-900/80 border border-slate-800 rounded-xl p-3">
+          <div class="flex items-center space-x-3">
+            <div class="p-2.5 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+              <i class="fa-solid fa-list-check text-lg"></i>
+            </div>
+            <div>
+              <div class="text-xs text-slate-400">Provisions identified</div>
+              <div id="stat-provisions" class="text-lg font-bold text-white font-mono">0 / 203</div>
+            </div>
+          </div>
+          <div class="mt-2 h-1.5 rounded-full bg-slate-800 overflow-hidden" role="progressbar" aria-label="Provisions identified" aria-valuemin="0" aria-valuemax="203" aria-valuenow="0">
+            <div id="provision-progress-bar" class="h-full rounded-full bg-cyan-400 transition-all duration-300" style="width: 0%"></div>
           </div>
         </div>
       </div>
@@ -2607,6 +2622,7 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
     let customDataset = [];
     let currentMode = 'TAGGING'; // 'TAGGING' or 'FILL_IN_BLANK'
     let currentRangeFilter = 'ALL';
+    const identifiedProvisions = new Set();
 
     let sessionStats = {
       score: 0,
@@ -2716,6 +2732,7 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
       // Pick target provisions
       const correctSections = targetRule.sections.map(sec => ({
         id: 'opt_' + Math.random().toString(36).substr(2, 9),
+        provisionKey: `${targetRule.rule}|${sec.section}|${sec.title}`,
         section: sec.section,
         title: sec.title,
         text: sec.text,
@@ -2724,8 +2741,7 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
         isSelected: false
       }));
 
-      const numCorrect = Math.min(correctSections.length, Math.floor(Math.random() * 2) + 1);
-      const selectedCorrect = shuffleArray(correctSections).slice(0, numCorrect);
+      const selectedCorrect = correctSections;
 
       // Distractors
       const otherRules = activeRulesDataset.filter(r => r.rule !== targetRule.rule);
@@ -2734,6 +2750,7 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
         r.sections.forEach(sec => {
           distractorPool.push({
             id: 'opt_' + Math.random().toString(36).substr(2, 9),
+            provisionKey: `${r.rule}|${sec.section}|${sec.title}`,
             section: sec.section,
             title: sec.title,
             text: sec.text,
@@ -2744,7 +2761,7 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
         });
       });
 
-      const numDistractors = Math.min(distractorPool.length, 3);
+      const numDistractors = Math.min(distractorPool.length, 6);
       const selectedDistractors = shuffleArray(distractorPool).slice(0, numDistractors);
 
       const options = shuffleArray([...selectedCorrect, ...selectedDistractors]);
@@ -2764,7 +2781,7 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
       document.getElementById('btn-tagging-next').classList.add('hidden');
       document.getElementById('tagging-feedback-text').innerHTML = `
         <i class="fa-solid fa-circle-info text-brand-400"></i>
-        <span>Select all provisions below that belong under <strong>${targetRule.rule}</strong>.</span>
+        <span>Select all <strong>${correctSections.length} provisions</strong> under <strong>${targetRule.rule}</strong>. ${selectedDistractors.length} distractors are mixed in.</span>
       `;
 
       const grid = document.getElementById('tiles-grid');
@@ -2832,6 +2849,7 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
         evalBox.classList.remove('hidden');
 
         if (opt.isTarget && opt.isSelected) {
+          identifiedProvisions.add(opt.provisionKey);
           tile.className = 'tile-transition bg-emerald-950/20 border-2 border-emerald-500 rounded-2xl p-5 flex flex-col justify-between shadow-lg shadow-emerald-950/30';
           badge.className = 'w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold';
           evalBox.className = 'mt-4 pt-3 border-t border-emerald-500/30 text-xs text-emerald-400 font-semibold flex items-center gap-1.5';
@@ -3048,12 +3066,24 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
 
       const filtered = getFilteredRules();
       document.getElementById('stat-pool').textContent = `${filtered.length} Rules`;
+
+      const allProvisionKeys = new Set(activeRulesDataset.flatMap(ruleObj =>
+        ruleObj.sections.map(sec => `${ruleObj.rule}|${sec.section}|${sec.title}`)
+      ));
+      const identifiedCount = [...identifiedProvisions].filter(key => allProvisionKeys.has(key)).length;
+      const totalProvisions = allProvisionKeys.size;
+      const progressBar = document.getElementById('provision-progress-bar');
+      document.getElementById('stat-provisions').textContent = `${identifiedCount} / ${totalProvisions}`;
+      progressBar.style.width = totalProvisions ? `${(identifiedCount / totalProvisions) * 100}%` : '0%';
+      progressBar.parentElement.setAttribute('aria-valuemax', totalProvisions);
+      progressBar.parentElement.setAttribute('aria-valuenow', identifiedCount);
     }
 
     function resetStats() {
       sessionStats = { score: 0, roundsCompleted: 0, streak: 0, totalCorrect: 0 };
+      identifiedProvisions.clear();
       updateStatsUI();
-      showToast('Scores & streak reset.', 'info');
+      showToast('Scores, streak, and provision progress reset.', 'info');
       generateNextRound();
     }
 
@@ -3179,6 +3209,7 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
         showToast(`Successfully imported ${newRules.length} rules!`, 'success');
 
         switchTab('practice');
+        updateStatsUI();
         generateNextRound();
         renderRulesLibrary();
 
@@ -3189,8 +3220,10 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
 
     function clearCustomData() {
       activeRulesDataset = [...BUILTIN_RULES_DATA];
+      identifiedProvisions.clear();
       document.getElementById('import-textarea').value = '';
       showToast('Reset to built-in Rules 1 to 22.', 'info');
+      updateStatsUI();
       renderRulesLibrary();
       generateNextRound();
     }
