@@ -219,16 +219,20 @@
           </button>
         </div>
 
-        <!-- Rule Range Filter -->
-        <div class="flex items-center space-x-3">
+        <!-- Rule Scope Filter -->
+        <div class="flex flex-wrap items-center gap-3">
           <span class="text-xs font-medium text-slate-400 uppercase tracking-wider hidden sm:inline"><i class="fa-solid fa-filter text-brand-400"></i> Scope:</span>
-          <select id="rule-range-filter" onchange="onRuleRangeFilterChange()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs sm:text-sm rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 outline-none w-full sm:w-auto">
+          <select id="rule-range-filter" aria-label="Practice scope" onchange="onRuleRangeFilterChange()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs sm:text-sm rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 outline-none w-full sm:w-auto">
             <option value="ALL">All Rules (Rules 1 to 22)</option>
             <option value="RULES_1_5">Rules 1 – 5 (General, Actions, Parties, Venue)</option>
             <option value="RULES_6_12">Rules 6 – 12 (Pleadings, Default, Amendments)</option>
             <option value="RULES_13_17">Rules 13 – 17 (Filing, Summons, Motions, Dismissal)</option>
             <option value="RULES_18_22">Rules 18 – 22 (Pre-Trial, Subpoena, Computation)</option>
+            <option value="INDIVIDUAL">Individual Rule</option>
           </select>
+
+          <label id="individual-rule-filter-wrap" for="individual-rule-filter" class="hidden text-xs font-medium text-slate-400">Choose rule:</label>
+          <select id="individual-rule-filter" aria-label="Choose an individual rule" onchange="onIndividualRuleFilterChange()" class="hidden bg-slate-800 border border-slate-700 text-slate-200 text-xs sm:text-sm rounded-xl px-3 py-2 focus:ring-2 focus:ring-brand-500 outline-none w-full sm:w-auto"></select>
 
           <button onclick="resetStats()" class="text-xs text-slate-400 hover:text-white underline transition whitespace-nowrap">
             Reset
@@ -2622,7 +2626,9 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
     let customDataset = [];
     let currentMode = 'TAGGING'; // 'TAGGING' or 'FILL_IN_BLANK'
     let currentRangeFilter = 'ALL';
+    let currentIndividualRule = '';
     const identifiedProvisions = new Set();
+    let keywordCorpusCache = null;
 
     let sessionStats = {
       score: 0,
@@ -2690,6 +2696,9 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
     // FILTER ELIGIBLE DATASET
     function getFilteredRules() {
       if (currentRangeFilter === 'ALL') return activeRulesDataset;
+      if (currentRangeFilter === 'INDIVIDUAL') {
+        return activeRulesDataset.filter(r => r.rule === currentIndividualRule);
+      }
       
       return activeRulesDataset.filter(r => {
         const num = parseInt(r.rule.replace(/\D/g, ''), 10);
@@ -2713,6 +2722,7 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
         showToast('No rules match the selected scope. Resetting filter to ALL.', 'error');
         currentRangeFilter = 'ALL';
         document.getElementById('rule-range-filter').value = 'ALL';
+        syncIndividualRulePicker();
         return generateNextRound();
       }
 
@@ -3055,6 +3065,38 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
 
     function onRuleRangeFilterChange() {
       currentRangeFilter = document.getElementById('rule-range-filter').value;
+      syncIndividualRulePicker();
+      generateNextRound();
+      updateStatsUI();
+    }
+
+    function refreshIndividualRuleOptions() {
+      const select = document.getElementById('individual-rule-filter');
+      if (!select) return;
+      const previousRule = currentIndividualRule || select.value;
+      const uniqueRules = [...new Map(activeRulesDataset.map(ruleObj => [ruleObj.rule, ruleObj])).values()];
+      select.replaceChildren();
+      uniqueRules.forEach(ruleObj => {
+        const option = document.createElement('option');
+        option.value = ruleObj.rule;
+        option.textContent = `${ruleObj.rule}: ${ruleObj.title}`;
+        select.appendChild(option);
+      });
+      currentIndividualRule = uniqueRules.some(ruleObj => ruleObj.rule === previousRule)
+        ? previousRule
+        : (uniqueRules[0]?.rule || '');
+      select.value = currentIndividualRule;
+    }
+
+    function syncIndividualRulePicker() {
+      refreshIndividualRuleOptions();
+      const isIndividual = currentRangeFilter === 'INDIVIDUAL';
+      document.getElementById('individual-rule-filter-wrap').classList.toggle('hidden', !isIndividual);
+      document.getElementById('individual-rule-filter').classList.toggle('hidden', !isIndividual);
+    }
+
+    function onIndividualRuleFilterChange() {
+      currentIndividualRule = document.getElementById('individual-rule-filter').value;
       generateNextRound();
       updateStatsUI();
     }
@@ -3065,7 +3107,7 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
       document.getElementById('stat-rounds').textContent = sessionStats.roundsCompleted;
 
       const filtered = getFilteredRules();
-      document.getElementById('stat-pool').textContent = `${filtered.length} Rules`;
+      document.getElementById('stat-pool').textContent = `${filtered.length} Rule${filtered.length === 1 ? '' : 's'}`;
 
       const allProvisionKeys = new Set(activeRulesDataset.flatMap(ruleObj =>
         ruleObj.sections.map(sec => `${ruleObj.rule}|${sec.section}|${sec.title}`)
@@ -3206,6 +3248,8 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
         }
 
         activeRulesDataset = [...BUILTIN_RULES_DATA, ...newRules];
+        keywordCorpusCache = null;
+        syncIndividualRulePicker();
         showToast(`Successfully imported ${newRules.length} rules!`, 'success');
 
         switchTab('practice');
@@ -3220,6 +3264,8 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
 
     function clearCustomData() {
       activeRulesDataset = [...BUILTIN_RULES_DATA];
+      keywordCorpusCache = null;
+      syncIndividualRulePicker();
       identifiedProvisions.clear();
       document.getElementById('import-textarea').value = '';
       showToast('Reset to built-in Rules 1 to 22.', 'info');
@@ -3260,8 +3306,84 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
     }
 
     function getSectionKeywords(section) {
-      if (Array.isArray(section.keywords) && section.keywords.length) return section.keywords;
-      return section.keyword ? [section.keyword] : [];
+      const savedKeywords = Array.isArray(section.keywords) && section.keywords.length
+        ? section.keywords
+        : (section.keyword ? [section.keyword] : []);
+      const text = section.text || '';
+      if (!text) return [...new Set(savedKeywords)];
+
+      // Add a few distinctive phrases from the operative text so fill-in-the-blank
+      // can test more than the original one or two hand-picked terms.
+      const corpus = getKeywordCorpus();
+      const dashIndex = text.indexOf('–');
+      const operativeText = dashIndex >= 0 ? text.slice(dashIndex + 1) : text;
+      const titleKey = normalizeKeyword(section.title || '');
+      const existing = new Set(savedKeywords.map(normalizeKeyword));
+      const words = [...operativeText.matchAll(/[A-Za-z][A-Za-z'’\-]*/g)];
+      const candidates = new Map();
+      const stopWords = new Set([
+        'a', 'an', 'and', 'are', 'as', 'at', 'be', 'been', 'being', 'but', 'by', 'for', 'from',
+        'had', 'has', 'have', 'he', 'her', 'hers', 'him', 'his', 'if', 'in', 'into', 'is', 'it',
+        'its', 'may', 'might', 'must', 'no', 'not', 'of', 'on', 'or', 'our', 'shall', 'she',
+        'should', 'so', 'such', 'than', 'that', 'the', 'their', 'them', 'there', 'these', 'they',
+        'this', 'those', 'through', 'to', 'under', 'unless', 'upon', 'was', 'were', 'which',
+        'who', 'whom', 'whose', 'will', 'with', 'within', 'without', 'would', 'you', 'your'
+      ]);
+
+      for (let size = 2; size <= 4; size++) {
+        for (let i = 0; i <= words.length - size; i++) {
+          const group = words.slice(i, i + size);
+          const start = group[0].index;
+          const end = group[group.length - 1].index + group[group.length - 1][0].length;
+          const phrase = operativeText.slice(start, end).trim();
+          // Avoid phrases that bridge punctuation or line breaks; blanks should
+          // always match one continuous phrase from the original text.
+          let isContinuous = true;
+          for (let j = 1; j < group.length; j++) {
+            const prevEnd = group[j - 1].index + group[j - 1][0].length;
+            if (!/^\s+$/.test(operativeText.slice(prevEnd, group[j].index))) {
+              isContinuous = false;
+              break;
+            }
+          }
+          if (!isContinuous) continue;
+
+          const normalized = normalizeKeyword(phrase);
+          const contentWords = group.map(match => match[0].toLowerCase()).filter(word => !stopWords.has(word));
+          if (contentWords.length < 2 || existing.has(normalized) || normalized === titleKey) continue;
+          if (/^(section|rule)\s+\d/.test(normalized)) continue;
+
+          const idf = contentWords.reduce((sum, word) => sum + (corpus.idf.get(word) || 0), 0) / contentWords.length;
+          const score = idf + (size - 2) * 0.16 + contentWords.length * 0.12;
+          if (!candidates.has(normalized) || candidates.get(normalized).score < score) {
+            candidates.set(normalized, { phrase, score });
+          }
+        }
+      }
+
+      const generated = [...candidates.values()]
+        .sort((a, b) => b.score - a.score || b.phrase.length - a.phrase.length)
+        .slice(0, Math.max(0, 5 - savedKeywords.length))
+        .map(candidate => candidate.phrase);
+      return [...new Set([...savedKeywords, ...generated])];
+    }
+
+    function normalizeKeyword(value) {
+      return String(value || '').toLowerCase().replace(/\s+/g, ' ').trim();
+    }
+
+    function getKeywordCorpus() {
+      if (keywordCorpusCache?.dataset === activeRulesDataset) return keywordCorpusCache;
+      const documentFrequency = new Map();
+      let documentCount = 0;
+      activeRulesDataset.forEach(ruleObj => ruleObj.sections.forEach(section => {
+        documentCount++;
+        const uniqueWords = new Set((section.text || '').toLowerCase().match(/[a-z][a-z'’\-]*/g) || []);
+        uniqueWords.forEach(word => documentFrequency.set(word, (documentFrequency.get(word) || 0) + 1));
+      }));
+      const idf = new Map([...documentFrequency].map(([word, count]) => [word, Math.log((documentCount + 1) / (count + 1))]));
+      keywordCorpusCache = { dataset: activeRulesDataset, idf };
+      return keywordCorpusCache;
     }
 
     function escapeRegExp(string) {
@@ -3282,6 +3404,7 @@ Rule 15	Sec. 8	An omnibus motion shall include all objections...	omnibus motion	
     }
 
     window.onload = function() {
+      refreshIndividualRuleOptions();
       generateNextRound();
       updateStatsUI();
     };
